@@ -1,0 +1,24 @@
+runtime: python310  # Specifies the Python runtime environment (use the appropriate version)
+
+entrypoint: gunicorn -b :$PORT app:app  # Starts the Flask app using Gunicorn
+
+instance_class: F2  # Defines the instance class (adjust according to your needs)
+
+env_variables:
+  # You can specify environment variables here, if needed
+  # For example:
+  #   FLASK_ENV: "production"
+  #   SECRET_KEY: "your-secret-key"
+
+handlers:
+  - url: /static
+    static_dir: static/  # Serves static files (e.g., CSS, JS, images) from the "static" folder
+  - url: /.*  # Redirect all other routes to your app
+    script: auto  # Automatically routes all other traffic to your app
+
+automatic_scaling:
+  target_cpu_utilization: 0.65  # Set CPU utilization for scaling
+  min_instances: 1  # Minimum number of instances
+  max_instances: 10  # Maximum number of instances
+
+# Optional - if you need a custom domain or additional configurations, you can specify those here
